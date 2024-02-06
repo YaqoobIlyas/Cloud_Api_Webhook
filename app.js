@@ -66,6 +66,6 @@ app.post("/webhook", (req, res) => {
   }
 });
 
-app.listen(8000 || process.env.PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log("Webhook is listening");
 });
