@@ -27,44 +27,34 @@ app.get("/webhook", (req, res) => {
 app.post("/webhook", (req, res) => {
   let body_param = req.body;
 
-  console.log(JSON.stringify(body_param, null, 2));
+  if (body_param.object && body_param.entry && body_param.entry.length > 0) {
+    let entry = body_param.entry[0];
 
-  if (body_param.object) {
-    if (
-      body_param.entry &&
-      body_param.entry[0].changes &&
-      body_param[0].changes[0].value.messages &&
-      body_param[0].changes[0].value.messages[0]
-    ) {
-      let phon_no_id =
-        body_param.entry[0].changes[0].value.metadata.phone_number_id;
-      let from = body_param.entry[0].changes[0].value.messages[0].from;
-      let mesg_body =
-        body_param.entry[0].changes[0].value.messages[0].text.body;
+    if (entry.changes && entry.changes.length > 0) {
+      let change = entry.changes[0];
 
-   /**    axios({
-        method: "POST",
-        url:
-          "https://graph.facebook.com/v18.0/" +
-          phon_no_id +
-          "/messages?access_token=" +
-          token,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: {
-            body: "HI>>>>",
-          },
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });**/
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(403);
+      if (
+        change.value &&
+        change.value.messages &&
+        change.value.messages.length > 0
+      ) {
+        let message = change.value.messages[0];
+
+        let phon_no_id = change.value.metadata.phone_number_id;
+        let from = message.from;
+        let mesg_body = message.text.body;
+
+        console.log("User sent this message:", mesg_body);
+
+        // Add your axios call here
+
+        res.sendStatus(200);
+        return;
+      }
     }
   }
+
+  res.sendStatus(403);
 });
 
 app.listen(process.env.PORT, () => {
