@@ -27,6 +27,8 @@ app.get("/webhook", (req, res) => {
 app.post("/webhook", (req, res) => {
   let body_param = req.body;
 
+  console.log(body_param, null, 2);
+
   if (body_param.object && body_param.entry && body_param.entry.length > 0) {
     let entry = body_param.entry[0];
 
