@@ -1,64 +1,32 @@
 const express = require("express");
-const body_parser = require("body-parser");
-const axios = require("axios");
+const morgan = require("morgan");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 require("dotenv").config();
-const app = express().use(body_parser.json());
 
-const token = process.env.TOKEN;
-const mytoken = process.env.MYTOKEN;
+//import routes
+const webhookRoutes=require("./routes/webhookRoute")
+const mediaRoutes = require("./routes/mediaRoute");
 
-app.get("/", (req, res) => {
-  res.send("WebHook is working well!!!");
-});
-app.get("/webhook", (req, res) => {
-  let mode = req.query["hub.mode"];
-  let challenge = req.query["hub.challenge"];
-  let token = req.query["hub.verify_token"];
+//app
+const app = express();
 
-  if (mode && token) {
-    if (mode === "subscribe" && token === mytoken) {
-      res.status(200).send(challenge);
-    } else {
-      res.status(403);
-    }
-  }
-});
+//middleware
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(cors());
 
-app.post("/webhook", (req, res) => {
-  let body_param = req.body;
+//routes middleware
+app.use("/webhook", webhookRoutes);
+app.use("/api", mediaRoutes);
 
-  console.log(JSON.stringify(body_param, null, 2));
+//routes
 
-  if (body_param.object && body_param.entry && body_param.entry.length > 0) {
-    let entry = body_param.entry[0];
+const port = 8000;
 
-    if (entry.changes && entry.changes.length > 0) {
-      let change = entry.changes[0];
-
-      if (
-        change.value &&
-        change.value.messages &&
-        change.value.messages.length > 0
-      ) {
-        let message = change.value.messages[0];
-
-        let phon_no_id = change.value.metadata.phone_number_id;
-        let from = message.from;
-        let mesg_body = message.text.body;
-
-        console.log("User sent this message:", mesg_body);
-
-        // Add your axios call here
-
-        res.sendStatus(200);
-        return;
-      }
-    }
-  }
-
-  res.sendStatus(403);
-});
-
-app.listen(process.env.PORT, () => {
-  console.log("Webhook is listening");
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
