@@ -38,7 +38,16 @@ exports.webhookEndpoint = async (req, res) => {
         let mesg_body = message.text.body;
 
         console.log("User sent this message:", mesg_body);
-
+        const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
+        axios
+          .get(apiUrl)
+          .then((response) => {
+            console.log("Response:", response.data);
+            // Handle the JSON response here
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
         // Add your axios call here
 
         res.sendStatus(200);
