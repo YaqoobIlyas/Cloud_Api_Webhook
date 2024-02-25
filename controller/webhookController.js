@@ -42,14 +42,13 @@ exports.webhookEndpoint = async (req, res) => {
         let mesg_body = message.text.body;
 
         console.log("User sent this message:", mesg_body);
-
         try {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
           const result = response.data.Result;
           console.log("Result:", result);
 
-          await axios.post(
+          const fbResponse = await axios.post(
             `https://graph.facebook.com/v18.0/${phon_no_id}/message?access_token=${token}`,
             {
               messaging_product: "whatsapp",
@@ -59,9 +58,11 @@ exports.webhookEndpoint = async (req, res) => {
               },
             }
           );
+          console.log("Facebook API Response:", fbResponse.data); // Log Facebook API response
           res.sendStatus(200);
         } catch (error) {
           console.error("Error:", error);
+          console.log("Facebook API Error Response:", error.response.data); // Log Facebook API error response
           res.status(500).send("Internal Server Error");
         }
         return;
