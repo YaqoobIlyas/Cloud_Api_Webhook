@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const token = process.env.TOKEN;
 const mytoken = process.env.MYTOKEN;
 
@@ -42,8 +44,9 @@ exports.webhookEndpoint = async (req, res) => {
         axios
           .get(apiUrl)
           .then((response) => {
-            console.log("Response:", response.data);
-            // Handle the JSON response here
+            const data = response.data;
+            const result = data.Result;
+            console.log("Result:", result);
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
