@@ -2,7 +2,7 @@ const axios = require("axios");
 
 const token = process.env.TOKEN;
 const mytoken = process.env.MYTOKEN;
-
+let result;
 exports.webhookVerification = async (req, res) => {
   let mode = req.query["hub.mode"];
   let challenge = req.query["hub.challenge"];
@@ -45,13 +45,32 @@ exports.webhookEndpoint = async (req, res) => {
           .get(apiUrl)
           .then((response) => {
             const data = response.data;
-            const result = data.Result;
+            result = data.Result;
             console.log("Result:", result);
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
           });
-        // Add your axios call here
+        // Second axios call to send message to user
+
+        axios({
+          method: "POST",
+          url:
+            "https://graph.facebook.com/v18.0/" +
+            phon_no_id +
+            "/message?access_token=" +
+            token,
+          data: {
+            messaging_product: "whatsapp",
+            to: from,
+            text: {
+              body: result,
+            },
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         res.sendStatus(200);
         return;
