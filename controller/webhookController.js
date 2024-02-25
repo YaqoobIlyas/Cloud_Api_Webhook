@@ -49,7 +49,7 @@ exports.webhookEndpoint = async (req, res) => {
           console.log("Result:", result);
 
           const fbResponse = await axios.post(
-            `https://graph.facebook.com/v18.0/${phon_no_id}/message?access_token=${token}`,
+            `https://graph.facebook.com/v18.0/${phon_no_id}/messages?access_token=${token}`,
             {
               messaging_product: "whatsapp",
               to: from,
