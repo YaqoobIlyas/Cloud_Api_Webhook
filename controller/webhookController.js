@@ -2,7 +2,7 @@ const axios = require("axios");
 
 const token = process.env.TOKEN;
 const mytoken = process.env.MYTOKEN;
-let result;
+
 exports.webhookVerification = async (req, res) => {
   let mode = req.query["hub.mode"];
   let challenge = req.query["hub.challenge"];
@@ -12,8 +12,10 @@ exports.webhookVerification = async (req, res) => {
     if (mode === "subscribe" && token === mytoken) {
       res.status(200).send(challenge);
     } else {
-      res.status(403);
+      res.status(403).send("Verification failed");
     }
+  } else {
+    res.status(400).send("Missing parameters");
   }
 };
 
@@ -40,39 +42,28 @@ exports.webhookEndpoint = async (req, res) => {
         let mesg_body = message.text.body;
 
         console.log("User sent this message:", mesg_body);
-        const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
-        axios
-          .get(apiUrl)
-          .then((response) => {
-            const data = response.data;
-            result = data.Result;
-            console.log("Result:", result);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-        // Second axios call to send message to user
 
-        axios({
-          method: "POST",
-          url:
-            "https://graph.facebook.com/v18.0/" +
-            phon_no_id +
-            "/message?access_token=" +
-            token,
-          data: {
-            messaging_product: "whatsapp",
-            to: from,
-            text: {
-              body: result,
-            },
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        try {
+          const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
+          const response = await axios.get(apiUrl);
+          const result = response.data.Result;
+          console.log("Result:", result);
 
-        res.sendStatus(200);
+          await axios.post(
+            `https://graph.facebook.com/v18.0/${phon_no_id}/message?access_token=${token}`,
+            {
+              messaging_product: "whatsapp",
+              to: from,
+              text: {
+                body: result,
+              },
+            }
+          );
+          res.sendStatus(200);
+        } catch (error) {
+          console.error("Error:", error);
+          res.status(500).send("Internal Server Error");
+        }
         return;
       }
     }
