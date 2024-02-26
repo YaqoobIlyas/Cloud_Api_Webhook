@@ -45,29 +45,10 @@ exports.webhookEndpoint = async (req, res) => {
         try {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
-          const resultData = response.data;
+          const resultData = JSON.parse(response.data);
+          
           console.log("Result: ", resultData.Result);
-          // Extract individual scores from the response
-          const scores = {
-            P1: resultData.P1,
-            P2: resultData.P2,
-            P3: resultData.P3,
-            P4: resultData.P4,
-            P5: resultData.P5,
-            P6: resultData.P6,
-            PartFirst: resultData.PartFirst,
-            Total: resultData.Total,
-            Grade: resultData.Grade,
-            Status: resultData.Status,
-          };
-
-          // Construct the formatted message
-          let formattedResult = "";
-          Object.keys(scores).forEach((key) => {
-            formattedResult += `${key}: ${scores[key]}\n`;
-          });
-
-          console.log("Formatted Result:", formattedResult);
+         
 
           const fbResponse = await axios.post(
             `https://graph.facebook.com/v18.0/${phon_no_id}/messages?access_token=${token}`,
@@ -75,7 +56,7 @@ exports.webhookEndpoint = async (req, res) => {
               messaging_product: "whatsapp",
               to: from,
               text: {
-                body: formattedResult,
+                body: resultData.Result,
               },
             }
           );
