@@ -45,7 +45,7 @@ exports.webhookEndpoint = async (req, res) => {
         try {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
-          const resultData = JSON.parse(response.data);
+          const resultData = response.data;
 
           console.log("Result: ", resultData.Result);
 
