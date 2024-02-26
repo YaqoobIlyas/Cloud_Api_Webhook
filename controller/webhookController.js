@@ -46,7 +46,7 @@ exports.webhookEndpoint = async (req, res) => {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
           const resultData = response.data;
-          console.log("Result: ", resultData);
+          console.log("Result: ", resultData.Result);
           // Extract individual scores from the response
           const scores = {
             P1: resultData.P1,
