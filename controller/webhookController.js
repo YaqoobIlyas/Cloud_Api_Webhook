@@ -55,7 +55,7 @@ exports.webhookEndpoint = async (req, res) => {
               messaging_product: "whatsapp",
               to: from,
               text: {
-                body: formattedResult,
+                body: "غیرحاضر",
               },
             }
           );
