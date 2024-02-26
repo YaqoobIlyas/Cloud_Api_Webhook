@@ -46,9 +46,8 @@ exports.webhookEndpoint = async (req, res) => {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
           const resultData = JSON.parse(response.data);
-          
+
           console.log("Result: ", resultData.Result);
-         
 
           const fbResponse = await axios.post(
             `https://graph.facebook.com/v18.0/${phon_no_id}/messages?access_token=${token}`,
@@ -60,7 +59,7 @@ exports.webhookEndpoint = async (req, res) => {
               },
             }
           );
-          console.log("Facebook API Response:", fbResponse.data); // Log Facebook API response
+
           res.sendStatus(200);
         } catch (error) {
           console.error("Error:", error);
