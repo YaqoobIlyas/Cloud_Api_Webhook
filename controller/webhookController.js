@@ -46,8 +46,8 @@ exports.webhookEndpoint = async (req, res) => {
           const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${mesg_body}`;
           const response = await axios.get(apiUrl);
           const resultData = response.data;
-
-          console.log("Result: ", resultData.Result);
+          const formattedResult = resultData.Result.replace(/\n/g, " ");
+          console.log("Result: ", formattedResult);
 
           const fbResponse = await axios.post(
             `https://graph.facebook.com/v18.0/${phon_no_id}/messages?access_token=${token}`,
@@ -55,7 +55,7 @@ exports.webhookEndpoint = async (req, res) => {
               messaging_product: "whatsapp",
               to: from,
               text: {
-                body: resultData.Result,
+                body: formattedResult,
               },
             }
           );
