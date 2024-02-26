@@ -63,7 +63,7 @@ exports.webhookEndpoint = async (req, res) => {
           res.sendStatus(200);
         } catch (error) {
           console.error("Error:", error);
-          console.log("Facebook API Error Response:", error.response.data); // Log Facebook API error response
+
           res.status(500).send("Internal Server Error");
         }
         return;
