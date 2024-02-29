@@ -31,7 +31,7 @@ exports.autoMessage = async (req, res) => {
       reply: formattedResult,
     });
 
-    res.sendStatus(200);
+   
   } catch (error) {
     console.error("Error:", error);
 

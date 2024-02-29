@@ -17,6 +17,7 @@ exports.webhookVerification = async (req, res) => {
   } else {
     res.status(400).send("Missing parameters");
   }
+  return;
 };
 
 exports.webhookEndpoint = async (req, res) => {
@@ -88,4 +89,5 @@ exports.webhookEndpoint = async (req, res) => {
   }
 
   res.sendStatus(403);
+  return;
 };
