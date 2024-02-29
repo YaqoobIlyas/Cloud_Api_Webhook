@@ -2,7 +2,7 @@ const axios = require("axios");
 
 exports.autoMessage = async (req, res) => {
   let body_param = req.body;
-  let formattedResult;
+  let formattedResult = ""; // Default value
   console.log(body_param);
   console.log("Message: ", body_param.message);
 
@@ -30,12 +30,13 @@ exports.autoMessage = async (req, res) => {
       formattedResult += `${key}: ${scores[key]}\n`;
     });
     console.log("Result: ", formattedResult);
-
-    res.json({
-      reply: formattedResult,
-    });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    formattedResult = "Error occurred. Please try again."; // Update formattedResult in case of error
   }
+
+  // Send response outside the try-catch block
+  res.json({
+    reply: formattedResult,
+  });
 };
