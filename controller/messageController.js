@@ -1,11 +1,18 @@
 const axios = require("axios");
 
 exports.autoMessage = async (req, res) => {
-  let body_param = req.body;
-  console.log(body_param);
-  console.log("Message: ", body_param.message);
-
   try {
+    let body_param = req.body;
+    console.log(body_param);
+    console.log("Message: ", body_param.message);
+
+    // Check if the message exists
+    if (!body_param || !body_param.message) {
+      return res
+        .status(400)
+        .json({ error: "Message is missing in the request body" });
+    }
+
     const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${body_param.message}`;
     const response = await axios.get(apiUrl);
     const resultData = response.data;
@@ -30,14 +37,9 @@ exports.autoMessage = async (req, res) => {
     });
     console.log("Result: ", formattedResult);
 
-    res.json({
-      reply: formattedResult,
-    });
+    res.json({ reply: formattedResult });
   } catch (error) {
     console.error("Error:", error);
-    console.error("Error Stack Trace:", error.stack);
-
-    // Send an error response
     res.status(500).send("Internal Server Error");
   }
 };
