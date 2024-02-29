@@ -30,11 +30,12 @@ exports.autoMessage = async (req, res) => {
       formattedResult += `${key}: ${scores[key]}\n`;
     });
     console.log("Result: ", formattedResult);
+
+    res.json({
+      reply: formattedResult,
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
-  res.json({
-    reply: formattedResult,
-  });
 };
