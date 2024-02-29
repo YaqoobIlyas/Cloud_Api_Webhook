@@ -2,6 +2,7 @@ const axios = require("axios");
 
 exports.autoMessage = async (req, res) => {
   let body_param = req.body;
+  let formattedResult;
   console.log(body_param);
   console.log("Message: ", body_param.message);
 
@@ -24,17 +25,16 @@ exports.autoMessage = async (req, res) => {
       ExamStatus: resultData.ExamStatus,
     };
 
-    let formattedResult = "";
+    formattedResult = "";
     Object.keys(scores).forEach((key) => {
       formattedResult += `${key}: ${scores[key]}\n`;
     });
     console.log("Result: ", formattedResult);
-
-    res.json({
-      reply: formattedResult,
-    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
+  res.json({
+    reply: formattedResult,
+  });
 };
