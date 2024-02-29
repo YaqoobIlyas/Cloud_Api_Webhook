@@ -6,9 +6,9 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 //import routes
-const webhookRoutes=require("./routes/webhookRoute")
+const webhookRoutes = require("./routes/webhookRoute");
 const mediaRoutes = require("./routes/mediaRoute");
-
+const messageRoutes = require("./routes/messageRoute");
 //app
 const app = express();
 
@@ -22,9 +22,15 @@ app.use(cors());
 //routes middleware
 app.use("/webhook", webhookRoutes);
 app.use("/api", mediaRoutes);
-
+app.use("/message", messageRoutes);
 //routes
-
+// default route handler
+app.use((req, res, next) => {
+  // If no routes match, respond with 404 status code
+  res
+    .status(200)
+    .json({ message: "Server is listinig But No Request is made Yet..:):)" });
+});
 const port = 8000;
 
 app.listen(port, () => {
