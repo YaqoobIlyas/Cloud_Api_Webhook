@@ -37,8 +37,4 @@ exports.autoMessage = async (req, res) => {
     reply: formattedResult,
   });
 };
-/*
 
-
-
-  // Send response outside the try-catch block-*/

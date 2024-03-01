@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 //import routes
@@ -19,7 +19,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-//routes middleware
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 1, // Limit each IP to 1 request per windowMs
+});
+
+// Apply the rate limiter to all requests
+app.use(limiter);
 app.use("/webhook", webhookRoutes);
 app.use("/api", mediaRoutes);
 app.use("/message", messageRoutes);
