@@ -5,7 +5,15 @@ exports.autoMessage = async (req, res) => {
   let formattedResult = ""; // Default value
   console.log(body_param);
   console.log("Message: ", body_param.message);
-  try {
+
+  res.json({
+    reply: formattedResult,
+  });
+};
+
+/*
+
+ try {
     const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${body_param.message}`;
     const response = await axios.get(apiUrl);
     const resultData = response.data;
@@ -33,8 +41,6 @@ exports.autoMessage = async (req, res) => {
     console.error("Error:", error);
     formattedResult = "Error occurred. Please try again."; // Update formattedResult in case of error
   }
-  res.json({
-    reply: formattedResult,
-  });
-};
 
+
+*/
