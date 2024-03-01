@@ -20,8 +20,8 @@ app.use(cookieParser());
 app.use(cors());
 
 const limiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 1, // Limit each IP to 1 request per windowMs
+  windowMs: 5 * 1000, // 1 minute
+  max: 10, // Limit each IP to 1 request per windowMs
 });
 
 // Apply the rate limiter to all requests

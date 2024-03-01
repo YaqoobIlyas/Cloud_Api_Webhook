@@ -6,7 +6,7 @@ exports.autoMessage = async (req, res) => {
   console.log(body_param);
   console.log("Message: ", body_param.message);
   // Immediately respond to the client to acknowledge receipt of the request
-  res.json({ reply: "Request received, will be processed shortly." });
+ // res.json({ reply: "Request received, will be processed shortly." });
 
   try {
     // Perform processing of the request body
@@ -51,11 +51,6 @@ async function processData(rollno) {
 
   return formattedResult;
 }
-/*
- res.json({
-    reply: formattedResult,
-  });
- 
 
 
-*/
+
