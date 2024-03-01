@@ -2,19 +2,28 @@ const axios = require("axios");
 
 exports.autoMessage = async (req, res) => {
   let body_param = req.body;
-  let formattedResult = ""; // Default value
+
   console.log(body_param);
   console.log("Message: ", body_param.message);
+  // Immediately respond to the client to acknowledge receipt of the request
+  res.json({ reply: "Request received, will be processed shortly." });
 
-  res.json({
-    reply: formattedResult,
-  });
+  try {
+    // Perform processing of the request body
+    const processedData = await processData(body_param.message);
+
+    // Once processing is complete, send the processed data back to the client
+    res.json({ reply: processedData });
+  } catch (error) {
+    // If an error occurs during processing, send an error response to the client
+    res.json({ reply: "An error occurred while processing the request." });
+  }
 };
 
-/*
-
- try {
-    const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${body_param.message}`;
+async function processData(rollno) {
+  let formattedResult = "";
+  try {
+    const apiUrl = `http://tanzeemulmadaris.net/Home/ShowResult?RollNo=${rollno}`;
     const response = await axios.get(apiUrl);
     const resultData = response.data;
 
@@ -32,15 +41,21 @@ exports.autoMessage = async (req, res) => {
       ExamStatus: resultData.ExamStatus,
     };
 
-    formattedResult = "";
     Object.keys(scores).forEach((key) => {
       formattedResult += `${key}: ${scores[key]}\n`;
     });
     console.log("Result: ", formattedResult);
   } catch (error) {
     console.error("Error:", error);
-    formattedResult = "Error occurred. Please try again."; // Update formattedResult in case of error
   }
+
+  return formattedResult;
+}
+/*
+ res.json({
+    reply: formattedResult,
+  });
+ 
 
 
 */
