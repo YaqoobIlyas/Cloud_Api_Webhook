@@ -5,17 +5,11 @@ exports.autoMessage = async (req, res) => {
 
   console.log(body_param);
   console.log("Message: ", body_param.message);
-  // Immediately respond to the client to acknowledge receipt of the request
- // res.json({ reply: "Request received, will be processed shortly." });
-
   try {
-    // Perform processing of the request body
     const processedData = await processData(body_param.message);
 
-    // Once processing is complete, send the processed data back to the client
-    res.json({ reply: processedData });
+    res.json({ reply: body_param.message });
   } catch (error) {
-    // If an error occurs during processing, send an error response to the client
     res.json({ reply: "An error occurred while processing the request." });
   }
 };
@@ -27,7 +21,6 @@ async function processData(rollno) {
     const response = await axios.get(apiUrl);
     const resultData = response.data;
 
-    // Extract individual scores from the response
     const scores = {
       P1: resultData.P1,
       P2: resultData.P2,
@@ -51,6 +44,3 @@ async function processData(rollno) {
 
   return formattedResult;
 }
-
-
-
