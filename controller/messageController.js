@@ -8,7 +8,7 @@ exports.autoMessage = async (req, res) => {
   try {
     const processedData = await processData(body_param.message);
 
-    res.json({ reply: body_param.message });
+    res.json({ reply: processedData });
   } catch (error) {
     res.json({ reply: "An error occurred while processing the request." });
   }
