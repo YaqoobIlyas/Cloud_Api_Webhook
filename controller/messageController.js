@@ -2,7 +2,7 @@ const axios = require("axios");
 
 exports.autoMessage = async (req, res) => {
   let body_param = req.body;
-
+ console.log(req);
   console.log(body_param);
   console.log("Message: ", body_param.message);
   try {
